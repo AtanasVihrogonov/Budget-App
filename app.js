@@ -9,7 +9,7 @@ const budgetController = (function() {
 
 
 
-
+  
 
 // UI CONTROLLER
 const UIController = (function() {
@@ -22,6 +22,9 @@ const UIController = (function() {
   }
 
 })();
+
+
+
 
 
 
