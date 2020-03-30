@@ -69,7 +69,7 @@ body {
 
 .budget__income {
   margin-bottom: 10px;
-  background-color: #A3E4D7 ;
+  background-color: #85C1E9 ;
 }
 
 .budget__expenses {
@@ -153,7 +153,7 @@ body {
   font-size: 35px;
   background: none;
   border: none;
-  color: #ADE3CC;
+  color: #3498DB ;
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
@@ -167,7 +167,7 @@ body {
 .add__description:focus,
 .add__value:focus {
   outline: none;
-  border: 1px solid #28B9B5;
+  border: 1px solid #85C1E9;
 }
 
 .add__btn:focus { outline: none; }
@@ -196,8 +196,8 @@ h2 {
   margin-bottom: 15px;
 }
 
-.icome__title { color: #28B9B5; }
-.expenses__title { color: #FF5049; }
+.icome__title { color: #85C1E9; }
+.expenses__title { color: #EC7063; }
 
 .item {
   padding: 13px;
@@ -230,13 +230,13 @@ h2 {
 
 .income .item__value,
 .income .item__delete--btn {
-  color: #28B9B5;
+  color: #85C1E9;
 }
 
 .expenses .item__value,
 .expenses .item__percentage,
 .expenses .item__delete--btn {
-  color: #FF5049;
+  color: #EC7063;
 }
 
 .item__delete {
@@ -264,7 +264,7 @@ h2 {
 .unpaid {
   background-color: #FFDAD9 !important;
   cursor: pointer;
-  color: #FF5049;
+  color: #EC7063;
 }
 
 .unpaid .item__percentage { box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1); }
