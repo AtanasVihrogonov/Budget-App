@@ -157,7 +157,35 @@ const UIController = (function() {
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
-        expensesPercLabel: '.item__percentage'
+        expensesPercLabel: '.item__percentage',
+        dateLabel: '.budget__title--month'
+
+    };
+
+    let formatNumber = function(num, type) {
+        let numSplit, int, dec;
+
+        num = Math.abs(num);
+        num  = num.toFixed(2);
+
+        numSplit = num.split('.');
+
+        int = numSplit[0];
+        // 2310.4567 -> 2,310.46
+        if (int.length > 3) {
+            int = int.substr(0, int.length - 3) + ',' + int.substr(int.length -3, 3); 
+            // input 2310, output 2,310
+        }
+
+        dec = numSplit[1];
+
+        return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
+    };
+
+    let nodeListForEach = function(list, callback) {
+        for (let i = 0; i < list.length; i++) {
+            callback(list[i], i);
+        }
     };
 
     return {
@@ -188,7 +216,7 @@ const UIController = (function() {
             // Replace the placeholder text with some actual data
             newHtml = html.replace('%id%', obj.id);
             newHtml = newHtml.replace('%description%', obj.description);
-            newHtml = newHtml.replace('%value%', obj.value);
+            newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
 
             // Insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
@@ -217,10 +245,12 @@ const UIController = (function() {
         },
 
         displayBudget: function(obj) {
-            document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
-            document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
-            document.querySelector(DOMstrings.expensesLabel).textContent =
-            obj.totalExp;
+            let type;
+            obj.budget > 0 ? type = 'inc' : type = 'exp';
+
+            document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+            document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc, type);
+            document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(obj.totalExp, type);
 
             if (obj.percentage > 0) {
                 document.querySelector(DOMstrings.percentageLabel).textContent =
@@ -233,18 +263,32 @@ const UIController = (function() {
         displayPercentages: function(percentages) {
             let fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-            let nodeListForEach = function(list, callback) {
-                for (let i = 0; i < list.length; i++) {
-                    callback(list[i], i);
-                }
-            };
-
             nodeListForEach(fields, function(current, index) {
                 if (percentages[index] > 0) {
                     current.textContent = percentages[index] + '%';
                 } else {
                     current.textContent = '---';
                 }
+            });
+        },
+
+        displayMonth: function() {
+            let now, year, month, months;
+
+            now = new Date();
+
+            months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Algust', 'September', 'October', 'November', 'Dicember'];
+            month = now.getMonth();
+
+            year = now.getFullYear();
+            document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
+        },
+
+        changedType: function() {
+            let fields = document.querySelector(DOMstrings.inputType + ',' + DOMstrings.inputDescription + ',' + DOMstrings.inputValue);  // this returns the node list
+
+            nodeListForEach(fields, function(current) {
+                current.classList.toggle('red-focus');
             });
         },
 
@@ -272,6 +316,7 @@ const controller = (function(budgetCtrl, UICtrl) {
         });
 
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
     };
 
     let updateBudget = function() {
@@ -338,7 +383,7 @@ const controller = (function(budgetCtrl, UICtrl) {
         // For calling the setupEventListeners() we have to create public initialization function. To be a public needs to return it as object.
         init: function() {
             console.log('started');
-
+            UICtrl.displayMonth();
             UICtrl.displayBudget({
                 budget: 0,
                 totalInc: 0,
