@@ -285,11 +285,13 @@ const UIController = (function() {
         },
 
         changedType: function() {
-            let fields = document.querySelector(DOMstrings.inputType + ',' + DOMstrings.inputDescription + ',' + DOMstrings.inputValue);  // this returns the node list
+            let fields = document.querySelectorAll(DOMstrings.inputType + ',' + DOMstrings.inputDescription + ',' + DOMstrings.inputValue);  // this returns the node list
 
             nodeListForEach(fields, function(current) {
                 current.classList.toggle('red-focus');
             });
+
+            document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
         },
 
         getDOMstrings: function() {
